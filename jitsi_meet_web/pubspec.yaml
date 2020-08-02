@@ -1,8 +1,8 @@
 name: jitsi_meet_web
 description: Jitsi Meet Web Plugin
 version: 0.0.1
-author: 
-homepage: 
+author: Lenin Hernández
+homepage: https://github.com/lennhv/
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
