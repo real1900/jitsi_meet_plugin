@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +54,8 @@ class JitsiMeet {
       }
     }
 
-    return await JitsiMeetPlatform.instance.joinMeeting(options, listener: listener);
+    return await JitsiMeetPlatform.instance
+        .joinMeeting(options, listener: listener);
   }
 
   /// Initializes the event channel. Call when listeners are added
@@ -92,10 +92,11 @@ class JitsiMeet {
   }
 }
 
-
 /// Allow create a interface for web view and attach it as a child
+/// optional param `extraJS` allows setup another external JS libraries
+/// or Javascript embebed code
 class JitsiMeetConferencing extends StatelessWidget {
-  final List<String> extraJS; 
+  final List<String> extraJS;
   JitsiMeetConferencing({this.extraJS});
 
   @override

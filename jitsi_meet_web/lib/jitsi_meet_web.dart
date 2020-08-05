@@ -13,11 +13,11 @@ import 'room_name_constraint.dart';
 import 'room_name_constraint_type.dart';
 
 /// JitsiMeetPlugin Web version for Jitsi Meet plugin
-///
 class JitsiMeetPlugin extends JitsiMeetPlatform {
   // List<JitsiMeetingListener> _listeners = <JitsiMeetingListener>[];
   // Map<String, JitsiMeetingListener> _perMeetingListeners = {};
   jitsi.JitsiMeetAPI api;
+  bool extraJSAdded = false;
 
   JitsiMeetPlugin._() {
     _setupScripts();
@@ -67,8 +67,8 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
       _addGenericListeners(listener);
 
       // force to dispose view when close meeting
-      // this is needed to allow create another room in 
-      // the same view without reload it 
+      // this is needed to allow create another room in
+      // the same view without reload it
       api.on("readyToClose", allowInterop((dynamic message) {
         api.dispose();
       }));
@@ -113,10 +113,12 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
     List<String> listeners = [];
     if (jitsiMeetingListener.onConferenceJoined != null) {
       listeners.add("videoConferenceJoined");
-    };
+    }
+    ;
     if (jitsiMeetingListener.onConferenceTerminated != null) {
       listeners.add("videoConferenceLeft");
-    };
+    }
+    ;
     jitsiMeetingListener.genericListeners
         .forEach((element) => listeners.add(element.eventName));
     api.removeEventListener(listeners);
@@ -139,16 +141,33 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
         ..style.height = '100%';
       return div;
     });
-    // add extraJS
-    _setupExtraScripts(extraJS);
+    // add extraJS only once
+    // this validation is needed because the view can be rebuileded several times
+    if (!extraJSAdded) {
+      _setupExtraScripts(extraJS);
+      extraJSAdded = true;
+    }
 
     return HtmlElementView(viewType: 'jitsi-meet-view');
   }
 
   void _setupExtraScripts(List<String> extraJS) {
-    final html.ScriptElement script = html.ScriptElement()
-      ..appendText(_clientJs());
-    html.querySelector('head').children.add(script);
+    extraJS?.forEach((element) {
+      RegExp regExp = RegExp(r"<script[^>]*>(.*?)<\/script[^>]*>");
+      if (regExp.hasMatch(element)) {
+        final html.NodeValidatorBuilder validator =
+            html.NodeValidatorBuilder.common()
+              ..allowElement('script',
+                  attributes: ['type', 'crossorigin', 'integrity', 'src']);
+        debugPrint("ADD script $element");
+        html.ScriptElement script =
+            html.Element.html(element, validator: validator);
+        html.querySelector('head').children.add(script);
+        // html.querySelector('head').appendHtml(element, validator: validator);
+      } else {
+        debugPrint("$element is not a valid script");
+      }
+    });
   }
 
   void _setupScripts() {
@@ -176,5 +195,4 @@ class JitsiMeetAPI extends JitsiMeetExternalAPI {
     }
 }
 var jitsi = { JitsiMeetAPI: JitsiMeetAPI };""";
-
 }

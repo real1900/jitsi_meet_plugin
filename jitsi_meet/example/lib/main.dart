@@ -78,7 +78,12 @@ class _MeetingState extends State<Meeting> {
                               child: SizedBox(
                                 width: width * 0.60 * 0.70,
                                 height: width * 0.60 * 0.70,
-                                child: JitsiMeetConferencing(),
+                                child: JitsiMeetConferencing(
+                                  extraJS: [ // extraJs setup example
+                                    '<script>function echo(){console.log("echo!!!")};</script>',
+                                    '<script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>'
+                                  ],
+                                ),
                               )),
                         ))
                   ],
@@ -225,8 +230,6 @@ class _MeetingState extends State<Meeting> {
     String serverUrl =
         serverText.text?.trim()?.isEmpty ?? "" ? null : serverText.text;
 
-    // try {
-
     // Enable or disable any feature flag here
     // If feature flag are not provided, default values will be used
     // Full list of feature flags (and defaults) available in the README
@@ -284,14 +287,10 @@ class _MeetingState extends State<Meeting> {
             JitsiGenericListener(
                 eventName: 'readyToClose',
                 callback: (dynamic message) {
-                  debugPrint(
-                      "readyToClose callback");
+                  debugPrint("readyToClose callback");
                 }),
           ]),
     );
-    // } catch (error) {
-    //   debugPrint("error: $error");
-    // }
   }
 
   static final Map<RoomNameConstraintType, RoomNameConstraint>
