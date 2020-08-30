@@ -8,7 +8,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:jitsi_meet_platform_interface/jitsi_meet_platform_interface.dart';
 import 'package:js/js.dart';
 
-import 'jitisi_meet_external_api.dart' as jitsi;
+import 'jitsi_meet_external_api.dart' as jitsi;
 import 'room_name_constraint.dart';
 import 'room_name_constraint_type.dart';
 
@@ -18,6 +18,7 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
   // Map<String, JitsiMeetingListener> _perMeetingListeners = {};
   jitsi.JitsiMeetAPI api;
   bool extraJSAdded = false;
+  RegExp cleanDomain = RegExp(r"^https?:\/\/");
 
   JitsiMeetPlugin._() {
     _setupScripts();
@@ -41,7 +42,10 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
     // encode `options` Map to Json to avoid error in interoperability conversions
     String webOptions = jsonEncode(options.webOptions);
     debugPrint("webOptions $webOptions");
-    api = jitsi.JitsiMeetAPI('meet.jit.si', webOptions);
+    String serverURL = options.serverURL ?? "meet.jit.si";
+    serverURL = serverURL.replaceAll(cleanDomain, "");
+    debugPrint("serverUrl $serverURL");
+    api = jitsi.JitsiMeetAPI(serverURL, webOptions);
     // setup listeners
     if (listener != null) {
       api.on("videoConferenceJoined", allowInterop((dynamic _message) {
@@ -61,7 +65,8 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
         debugPrint("feedbackSubmitted message: $message");
         listener.onError(message);
       }));
-      // onConferenceWillJoin is not supported or nof found event in web
+      
+      // NOTE: onConferenceWillJoin is not supported or nof found event in web
 
       // add geeric listener
       _addGenericListeners(listener);
@@ -195,4 +200,5 @@ class JitsiMeetAPI extends JitsiMeetExternalAPI {
     }
 }
 var jitsi = { JitsiMeetAPI: JitsiMeetAPI };""";
+
 }
