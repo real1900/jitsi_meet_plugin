@@ -5,7 +5,7 @@ The idea is to be integrated in the plugin.. meanwhile...
 
 ## Support for WEB
 
-To use this code i your project:
+To use this code in your project:
 
 1. Clone this repo in a location near of your project.
 
