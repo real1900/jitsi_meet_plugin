@@ -1,7 +1,6 @@
 # jitsi_meet
 
-Jitsi Meet Plugin for Flutter clone from https://github.com/gunschu/jitsi_meet.git.
-The idea is to be integrated in the plugin.. meanwhile...
+Jitsi Meet Plugin for Flutter clone from https://github.com/gunschu/jitsi_meet.git with additional support for web. 
 
 ## Support for WEB
 
@@ -12,8 +11,8 @@ To use this code in your project:
 2. Add the package in pubspec.yml file using `path` and the relative path for 'jitsi_meet' (see cloned repo)
 
 ```
-  jitsi_meet:
-    path: ../jitsi_meet_plugin/jitsi_meet
+  jitsi_meet_web: Any
+    
 ```
 
 3. Add the External JS into `index.html` into web folder of your project.
@@ -24,9 +23,9 @@ To use this code in your project:
 
 4. Import it
 ```
-import 'package:jitsi_meet/jitsi_meet.dart';
+import 'package:jitsi_meet_web/jitsi_meet.dart';
 ```
 
 ## Example
 
-https://github.com/lennhv/jitsi_meet_plugin/tree/master/jitsi_meet/example
+https://github.com/real1900/jitsi_meet_plugin/tree/master/jitsi_meet/example
