@@ -1,4 +1,4 @@
-## 0.0.1
-
-Initial implementation. 
-
+## [1.0.0] - 2020-12-10
+ 
+* Initial release
+* Web support enabled
