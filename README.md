@@ -1,6 +1,6 @@
 # jitsi_meet
 
-Jitsi Meet Plugin for Flutter clone from https://github.com/gunschu/jitsi_meet.git with additional support for web. 
+Jitsi Meet Plugin support for web. 
 
 ## Support for WEB
 
